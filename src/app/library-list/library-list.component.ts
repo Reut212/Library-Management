@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { BookDetailes } from '../shared/author.model';
+import { BookDetailes } from '../shared/bookDetailes.model';
+import { LibraryListService } from './library-list.service';
 
 @Component({
   selector: 'app-library-list',
   templateUrl: './library-list.component.html',
-  styleUrls: ['./library-list.component.css']
+  styleUrls: ['./library-list.component.css'],
 })
 export class LibraryListComponent implements OnInit {
-  bookDetails: BookDetailes[] = [
-    new BookDetailes('Ned Blackhawk', 1995),
-    new BookDetailes('Ned Blackhawk', 1995)
-  ];
-  constructor() { }
+  bookDetails: BookDetailes[];
+  constructor(private libraryListService: LibraryListService) { }
 
   ngOnInit(): void {
-  }
-
-  onBookAdded(bookDetail: BookDetailes) {
-    this.bookDetails.push(bookDetail);
+    this.bookDetails = this.libraryListService.getBookDetail();
+    this.libraryListService.bookAdded.subscribe(
+      (bookDetails: BookDetailes[]) => {
+        this.bookDetails = bookDetails;
+      }
+    )
   }
 }

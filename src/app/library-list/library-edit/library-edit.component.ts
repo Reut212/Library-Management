@@ -1,5 +1,6 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { BookDetailes } from 'src/app/shared/author.model';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { BookDetailes } from 'src/app/shared/bookDetailes.model';
+import { LibraryListService } from '../library-list.service';
 
 @Component({
   selector: 'app-library-edit',
@@ -7,12 +8,10 @@ import { BookDetailes } from 'src/app/shared/author.model';
   styleUrls: ['./library-edit.component.css']
 })
 export class LibraryEditComponent implements OnInit {
-
   @ViewChild('nameInput') nameInputRef: ElementRef;
   @ViewChild('yearInput') yearInputRef: ElementRef;
-  @Output() bookAdded = new EventEmitter<BookDetailes>();
 
-  constructor() { }
+  constructor(private libraryListService: LibraryListService) { }
 
   ngOnInit(): void {
   }
@@ -21,6 +20,6 @@ export class LibraryEditComponent implements OnInit {
     const bookName = this.nameInputRef.nativeElement.value;
     const bookYear = this.yearInputRef.nativeElement.value;
     const newBookDetail = new BookDetailes(bookName, bookYear);
-    this.bookAdded.emit(newBookDetail);
+    this.libraryListService.addNewBook(newBookDetail);
   }
 }

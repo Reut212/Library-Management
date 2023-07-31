@@ -10,6 +10,8 @@ import { BookItemComponent } from './books/book-list/book-item/book-item.compone
 import { LibraryListComponent } from './library-list/library-list.component';
 import { LibraryEditComponent } from './library-list/library-edit/library-edit.component';
 import { FormsModule } from '@angular/forms';
+import { DropdownDirective } from './shared/dropdown.directive';
+import { LibraryListService } from './library-list/library-list.service';
 
 @NgModule({
   declarations: [
@@ -21,12 +23,13 @@ import { FormsModule } from '@angular/forms';
     BookItemComponent,
     LibraryListComponent,
     LibraryEditComponent,
+    DropdownDirective,
   ],
   imports: [
     BrowserModule,
     FormsModule
   ],
-  providers: [],
+  providers: [LibraryListService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
