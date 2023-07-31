@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-xs-12">
+    <img
+     [src]="book.imagePath"
+     alt="{{ book.name }}"
+     class="img-responsive"
+     style="max-height: 300px;">
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <h1>{{ book.name }}</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary dropdown-toggle">Manage book
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a href="#">To Library List</a></li>
+        <li><a href="#">Edit book</a></li>
+        <li><a href="#">Delete book</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    {{ book.description }}
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    Authors
+  </div>
+</div>
