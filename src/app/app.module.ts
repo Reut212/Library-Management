@@ -12,6 +12,9 @@ import { LibraryEditComponent } from './library-list/library-edit/library-edit.c
 import { FormsModule } from '@angular/forms';
 import { DropdownDirective } from './shared/dropdown.directive';
 import { LibraryListService } from './library-list/library-list.service';
+import { AppRoutingModule } from './app-routing.module';
+import { BookStartComponent } from './books/book-start/book-start.component';
+import { BookEditComponent } from './books/book-edit/book-edit.component';
 
 @NgModule({
   declarations: [
@@ -24,10 +27,13 @@ import { LibraryListService } from './library-list/library-list.service';
     LibraryListComponent,
     LibraryEditComponent,
     DropdownDirective,
+    BookStartComponent,
+    BookEditComponent,
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    AppRoutingModule,
   ],
   providers: [LibraryListService],
   bootstrap: [AppComponent]

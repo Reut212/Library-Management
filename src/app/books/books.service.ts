@@ -1,4 +1,5 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { LibraryListService } from '../library-list/library-list.service';
 import { BookDetailes } from '../shared/bookDetailes.model';
 import { Book } from './book.model';
@@ -6,7 +7,7 @@ import { Book } from './book.model';
 @Injectable()
 export class BooksService {
 
-  bookSelected = new EventEmitter<Book>();
+  bookSelected = new Subject<Book>();
 
   private books:Book[]  = [
     new Book(
@@ -27,6 +28,10 @@ export class BooksService {
 
   getBooks() {
     return this.books.slice();
+  }
+
+  getBook(id: number) {
+    return this.books[id];
   }
 
   addBookToLibraryList(bookDetail: BookDetailes[]) {

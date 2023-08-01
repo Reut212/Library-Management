@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Book } from '../book.model';
 import { BooksService } from '../books.service';
 
@@ -8,13 +9,27 @@ import { BooksService } from '../books.service';
   styleUrls: ['./book-detail.component.css']
 })
 export class BookDetailComponent implements OnInit {
-  @Input() book: Book;
-  constructor(private bookService: BooksService) { }
+  book: Book;
+  id: number;
+  constructor(
+    private bookService: BooksService,
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit(): void {
+    this.route.params.subscribe(
+      (params: Params) => {
+        this.id = +params['id'];
+        this.book = this.bookService.getBook(this.id);
+      }
+    );
   }
 
   onAddToLibraryList() {
     this.bookService.addBookToLibraryList(this.book.bookDetail);
+  }
+
+  onEditBook() {
+    this.router.navigate(['edit'], {relativeTo: this.route});
   }
 }
