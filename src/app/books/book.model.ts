@@ -4,12 +4,12 @@ export class Book {
   public name: string;
   public description: string;
   public imagePath: string;
-  public bookDetail: BookDetailes[];
+  public bookDetailes: BookDetailes[];
 
   constructor(name: string, desc: string, imagePath: string, bookDetail: BookDetailes[]) {
     this.name = name;
     this.description = desc;
     this.imagePath = imagePath;
-    this.bookDetail = bookDetail;
+    this.bookDetailes = bookDetail;
   }
 }

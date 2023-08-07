@@ -9,12 +9,13 @@ import { BookDetailComponent } from './books/book-detail/book-detail.component';
 import { BookItemComponent } from './books/book-list/book-item/book-item.component';
 import { LibraryListComponent } from './library-list/library-list.component';
 import { LibraryEditComponent } from './library-list/library-edit/library-edit.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownDirective } from './shared/dropdown.directive';
 import { LibraryListService } from './library-list/library-list.service';
 import { AppRoutingModule } from './app-routing.module';
 import { BookStartComponent } from './books/book-start/book-start.component';
 import { BookEditComponent } from './books/book-edit/book-edit.component';
+import { BooksService } from './books/books.service';
 
 @NgModule({
   declarations: [
@@ -33,9 +34,10 @@ import { BookEditComponent } from './books/book-edit/book-edit.component';
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
   ],
-  providers: [LibraryListService],
+  providers: [LibraryListService, BooksService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

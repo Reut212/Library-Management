@@ -5,14 +5,19 @@ import { Subject } from 'rxjs';
 export class LibraryListService {
 //MANAGE OUR SHOPPING LIST - ADD INGRIDIENT METHOD
   bookAdded = new Subject<BookDetailes[]>();
+  startedEditing = new Subject<number>();
 
   private bookDetails: BookDetailes[] = [
     new BookDetailes('Ned Blackhawk', 1995),
     new BookDetailes('Ned Blackhawk', 1995)
   ];
 
-  getBookDetail() {
+  getBookDetailes() {
     return this.bookDetails.slice();
+  }
+
+  getBookDetail(index: number) {
+    return this.bookDetails[index];
   }
 
   addNewBook(bookDetail: BookDetailes) {
@@ -22,6 +27,16 @@ export class LibraryListService {
 
   addBookDetail(bookDetails: BookDetailes[]) {
     this.bookDetails.push(...bookDetails);
+    this.bookAdded.next(this.bookDetails.slice())
+  }
+
+  updateBookDeatil(index: number, newBookDetail: BookDetailes) {
+    this.bookDetails[index] = newBookDetail;
+    this.bookAdded.next(this.bookDetails.slice());
+  }
+
+  deleteBookDetail(index: number) {
+    this.bookDetails.splice(index, 1);
     this.bookAdded.next(this.bookDetails.slice())
   }
 }

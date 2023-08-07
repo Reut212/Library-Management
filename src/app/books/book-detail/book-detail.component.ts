@@ -26,10 +26,15 @@ export class BookDetailComponent implements OnInit {
   }
 
   onAddToLibraryList() {
-    this.bookService.addBookToLibraryList(this.book.bookDetail);
+    this.bookService.addBookToLibraryList(this.book.bookDetailes);
   }
 
   onEditBook() {
     this.router.navigate(['edit'], {relativeTo: this.route});
+  }
+
+  onDeleteBook() {
+    this.bookService.deleteBook(this.id);
+    this.router.navigate(['/books']);
   }
 }

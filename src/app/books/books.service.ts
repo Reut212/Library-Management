@@ -6,6 +6,7 @@ import { Book } from './book.model';
 
 @Injectable()
 export class BooksService {
+  booksChanged = new Subject<Book[]>();
 
   bookSelected = new Subject<Book>();
 
@@ -36,5 +37,20 @@ export class BooksService {
 
   addBookToLibraryList(bookDetail: BookDetailes[]) {
     this.libraryListService.addBookDetail(bookDetail);
+  }
+
+  addBook(book: Book) {
+    this.books.push(book);
+    this.booksChanged.next(this.books.slice());
+  }
+
+  updateBook(index: number, newBook: Book) {
+    this.books[index] = newBook;
+    this.booksChanged.next(this.books.slice());
+  }
+
+  deleteBook(index: number) {
+    this.books.splice(index, 1);
+    this.booksChanged.next(this.books.slice());
   }
 }

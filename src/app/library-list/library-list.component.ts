@@ -14,7 +14,7 @@ export class LibraryListComponent implements OnInit, OnDestroy {
   constructor(private libraryListService: LibraryListService) { }
 
   ngOnInit(): void {
-    this.bookDetails = this.libraryListService.getBookDetail();
+    this.bookDetails = this.libraryListService.getBookDetailes();
     this.subscription = this.libraryListService.bookAdded.subscribe(
       (bookDetails: BookDetailes[]) => {
         this.bookDetails = bookDetails;
@@ -24,5 +24,9 @@ export class LibraryListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
       this.subscription.unsubscribe();
+  }
+
+  onEditItem(index: number) {
+    this.libraryListService.startedEditing.next(index);
   }
 }

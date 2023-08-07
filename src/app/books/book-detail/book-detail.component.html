@@ -23,7 +23,7 @@
       <ul class="dropdown-menu">
         <li><a (click)="onAddToLibraryList()" style="cursor: pointer;">To Library List</a></li>
         <li><a style="cursor: pointer;" (click)="onEditBook()">Edit book</a></li>
-        <li><a style="cursor: pointer;">Delete book</a></li>
+        <li><a style="cursor: pointer;" (click)="onDeleteBook()">Delete book</a></li>
       </ul>
     </div>
   </div>
@@ -36,7 +36,7 @@
 <div class="row">
   <div class="col-xs-12">
     <ul class="list-group-item"
-    *ngFor="let bookDetail of book.bookDetail">
+    *ngFor="let bookDetail of book.bookDetailes">
     {{ bookDetail.name }} - {{ bookDetail.yearOfPublish }}
   </ul>
   </div>

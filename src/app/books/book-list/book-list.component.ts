@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs-compat';
 import { Book } from '../book.model';
 import { BooksService } from '../books.service';
 
@@ -8,8 +9,11 @@ import { BooksService } from '../books.service';
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.css']
 })
-export class BookListComponent implements OnInit {
+export class BookListComponent implements OnInit, OnDestroy {
   books:Book[];
+  subscription: Subscription;
+
+  private API = 'https://www.googleapis.com/books/v1/volumes';
 
   constructor(
     private bookService: BooksService,
@@ -17,7 +21,16 @@ export class BookListComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.subscription = this.bookService.booksChanged.subscribe(
+      (books: Book[]) => {
+        this.books = books;
+      }
+    )
     this.books = this.bookService.getBooks();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   onNewBook() {

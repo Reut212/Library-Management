@@ -6,7 +6,8 @@
       <a
       class="list-group-item"
       style="cursor: pointer"
-      *ngFor="let bookDetail of bookDetails"
+      *ngFor="let bookDetail of bookDetails; let i=index"
+      (click)="onEditItem(i)"
       >
       {{ bookDetail.name }} ({{ bookDetail.yearOfPublish }})
     </a>
