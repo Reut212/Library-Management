@@ -6,10 +6,35 @@
 <br>
 <div class="row">
   <div class="col-xs-12">
-    <app-book-item
-    *ngFor="let bookElement of books; let i = index"
-    [book]="bookElement"
-    [index]="i"
-    ></app-book-item>
+    <div>
+      <input
+      type="text"
+      placeholder="Search for books..."
+      [(ngModel)]="searchQuery"
+      (keyup)="searchBooks()"
+      />
+    </div>
+    <div>
+      <br>
+      <label for="sort">Sort by:</label>
+      <select id="sort" [(ngModel)]="sortOption" (change)="onSortOptionChange()">
+        <option value="author">Author</option>
+        <option value="publishedDate">Publication Date</option>
+        <option value="catalogNumber">Catalog Number</option>
+      </select>
+    </div>
+    <hr>
+    <div *ngFor="let book of sortedBooks">
+      <h2>{{ book.volumeInfo.title }}</h2>
+      <p>Authors: {{ book.volumeInfo.authors.join(', ') }}</p>
+      <p>Publisher: {{ book.volumeInfo.publisher }}</p>
+      <p>Catalog Number: {{ book.id }}</p>
+      <img
+        *ngIf="book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail"
+        [src]="book.volumeInfo.imageLinks.thumbnail"
+        alt="{{ book.volumeInfo.title }} cover"
+      />
+      <hr>
+      </div>
   </div>
 </div>

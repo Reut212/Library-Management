@@ -16,6 +16,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BookStartComponent } from './books/book-start/book-start.component';
 import { BookEditComponent } from './books/book-edit/book-edit.component';
 import { BooksService } from './books/books.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { BooksService } from './books/books.service';
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    HttpClientModule,
   ],
   providers: [LibraryListService, BooksService],
   bootstrap: [AppComponent]

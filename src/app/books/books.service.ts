@@ -3,9 +3,15 @@ import { Subject } from 'rxjs';
 import { LibraryListService } from '../library-list/library-list.service';
 import { BookDetailes } from '../shared/bookDetailes.model';
 import { Book } from './book.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class BooksService {
+
+  private apiUrl = 'https://www.googleapis.com/books/v1/volumes';
+  private apiKey = 'AIzaSyAMIIrYNFTTSPAyq6lXAugUGcpUXpZjy9Y'
+
   booksChanged = new Subject<Book[]>();
 
   bookSelected = new Subject<Book>();
@@ -23,13 +29,23 @@ export class BooksService {
       [new BookDetailes('Laoura Dave', 2020)]),
   ];
 
-  constructor(private libraryListService: LibraryListService){
+  constructor(private libraryListService: LibraryListService, private http: HttpClient){
 
   }
 
-  getBooks() {
-    return this.books.slice();
+  getBooks(query: string): Observable<any> {
+    const url = `${this.apiUrl}?q=${query}&key=${this.apiKey}`;
+    return this.http.get(url);
   }
+
+  getBookDetails(bookID: string): Observable<any> {
+    const url = `${this.apiUrl}/${bookID}?key=${this.apiKey}`;
+    return this.http.get(url);
+  }
+
+  // getBooks() {
+  //   return this.books.slice();
+  // }
 
   getBook(id: number) {
     return this.books[id];
@@ -49,8 +65,7 @@ export class BooksService {
     this.booksChanged.next(this.books.slice());
   }
 
-  deleteBook(index: number) {
-    this.books.splice(index, 1);
-    this.booksChanged.next(this.books.slice());
+  deleteBook(bookID: string) {
+    const chosenBook = `${this.apiUrl}/${bookID}?key=${this.apiKey}`;
   }
 }

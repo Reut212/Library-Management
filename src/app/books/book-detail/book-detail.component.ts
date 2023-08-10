@@ -10,19 +10,25 @@ import { BooksService } from '../books.service';
 })
 export class BookDetailComponent implements OnInit {
   book: Book;
-  id: number;
+  bookId: string;
+
   constructor(
     private bookService: BooksService,
     private route: ActivatedRoute,
     private router: Router) { }
 
   ngOnInit(): void {
-    this.route.params.subscribe(
-      (params: Params) => {
-        this.id = +params['id'];
-        this.book = this.bookService.getBook(this.id);
-      }
-    );
+    this.route.paramMap.subscribe((params) => {
+      this.bookId = params.get('id');
+      this.fetchBookDetails(this.bookId);
+    });
+  }
+
+  fetchBookDetails(bookId: string): void {
+    // Use the book service to fetch detailed book information
+    this.bookService.getBookDetails(bookId).subscribe((data) => {
+      this.book = data; // Store the book details in the 'book' property
+    });
   }
 
   onAddToLibraryList() {
@@ -34,7 +40,7 @@ export class BookDetailComponent implements OnInit {
   }
 
   onDeleteBook() {
-    this.bookService.deleteBook(this.id);
+    this.bookService.deleteBook(this.bookId);
     this.router.navigate(['/books']);
   }
 }
