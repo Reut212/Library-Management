@@ -30,10 +30,11 @@ export class BookEditComponent implements OnInit {
     )
   }
 
-  onSubmit(){
+  onSubmit() {
     const newBook = new Book(
       this.bookForm.value['name'],
       this.bookForm.value['description'],
+      this.bookForm.value['authors'],
       this.bookForm.value['imagePath'],
       this.bookForm.value['bookDetailes']
     );
@@ -47,14 +48,16 @@ export class BookEditComponent implements OnInit {
 
   private initForm() {
     let bookName = '';
-    let bookImagePath = '';
+    let imageLinks: {
+      thumbnail: string;
+    };
     let bookDescription = '';
     let bookDetailes = new FormArray([]);
 
     if (this.editMode) {
       const book = this.bookService.getBook(this.id);
-      bookName = book.name;
-      bookImagePath = book.imagePath;
+      bookName = book.title;
+      imageLinks = book.imageLinks;
       bookDescription = book.description;
       if (book['bookDetailes']) {
         for (let bookDetail of book.bookDetailes) {
@@ -72,7 +75,7 @@ export class BookEditComponent implements OnInit {
     }
     this.bookForm = new FormGroup({
       'name': new FormControl(bookName, Validators.required),
-      'imagePath': new FormControl(bookImagePath, Validators.required),
+      'imagePath': new FormControl(imageLinks, Validators.required),
       'description': new FormControl(bookDescription, Validators.required),
       'bookDetailes': bookDetailes
     });

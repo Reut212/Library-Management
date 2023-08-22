@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { LibraryListService } from '../library-list/library-list.service';
 import { BookDetailes } from '../shared/bookDetailes.model';
@@ -12,22 +12,32 @@ export class BooksService {
   private apiUrl = 'https://www.googleapis.com/books/v1/volumes';
   private apiKey = 'AIzaSyAMIIrYNFTTSPAyq6lXAugUGcpUXpZjy9Y'
 
-  booksChanged = new Subject<Book[]>();
+  booksChanged = new EventEmitter<Book[]>(); // EventEmitter to notify about changes
 
   bookSelected = new Subject<Book>();
 
-  private books:Book[]  = [
+  // private books:Book[]  = [
+    // new Book(
+    //   'Living The Vanlife',
+    //   'This is simply a test',
+    //   'https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781982179618/living-the-vanlife-9781982179618_lg.jpg',
+    //   [new BookDetailes('Naomi J.Grevemberg', 1990)]),
+    // new Book(
+    //   'The Last Thing He Told Me',
+    //   'This is simply a test',
+    //   'https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781501171352/the-last-thing-he-told-me-9781501171352_lg.jpg',
+    //   [new BookDetailes('Laoura Dave', 2020)]),
+  // ];
+  private books: Book[] = [
     new Book(
-      'Living The Vanlife',
-      'This is simply a test',
-      'https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781982179618/living-the-vanlife-9781982179618_lg.jpg',
-      [new BookDetailes('Naomi J.Grevemberg', 1990)]),
-    new Book(
-      'The Last Thing He Told Me',
-      'This is simply a test',
-      'https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781501171352/the-last-thing-he-told-me-9781501171352_lg.jpg',
-      [new BookDetailes('Laoura Dave', 2020)]),
-  ];
+      '',
+      '',
+      [],
+      {
+        thumbnail: ''
+      },
+      []),
+    ];
 
   constructor(private libraryListService: LibraryListService, private http: HttpClient){
 
@@ -38,7 +48,7 @@ export class BooksService {
     return this.http.get(url);
   }
 
-  getBookDetails(bookID: string): Observable<any> {
+  getBookDetailsFromAPI(bookID: string): Observable<any> {
     const url = `${this.apiUrl}/${bookID}?key=${this.apiKey}`;
     return this.http.get(url);
   }
@@ -56,8 +66,8 @@ export class BooksService {
   }
 
   addBook(book: Book) {
-    this.books.push(book);
-    this.booksChanged.next(this.books.slice());
+    this.books.unshift(book);
+    this.booksChanged.emit(this.books.slice());
   }
 
   updateBook(index: number, newBook: Book) {

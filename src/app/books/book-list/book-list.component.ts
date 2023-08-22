@@ -10,6 +10,7 @@ import { BooksService } from '../books.service';
 
 export class BookListComponent implements OnInit, OnDestroy {
   books:any[] = [];
+  private booksChangedSub: Subscription;
   subscription: Subscription;
   searchQuery: string = '';
   sortOption: string = 'authors';
@@ -21,9 +22,16 @@ export class BookListComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute) { }
 
-  ngOnInit(): void {
-    this.searchBooks();
-  }
+    ngOnInit(): void {
+      this.booksChangedSub = this.bookService.booksChanged.subscribe(
+        (updatedBooks: any[]) => {
+          this.books = updatedBooks;
+          this.filterAndSortBooks();
+        }
+      );
+      this.fetchAllBooks();
+
+    }
 
   searchBooks(): void {
     if (this.searchQuery.trim() !== '') {
@@ -49,10 +57,11 @@ export class BookListComponent implements OnInit, OnDestroy {
   filterAndSortBooks(): void {
     // Filter and sort books based on criteria
     const filteredBooks = this.books.filter((book) => {
-      const hasPublicationYear = book.volumeInfo.publishedDate;
-      const hasAuthor = book.volumeInfo.authors && book.volumeInfo.authors.length > 0;
+      const hasVolumeInfo = book.volumeInfo && typeof book.volumeInfo === 'object';
+      const hasPublicationYear = hasVolumeInfo && book.volumeInfo.publishedDate;
+      const hasAuthor = hasVolumeInfo && book.volumeInfo.authors && book.volumeInfo.authors.length > 0;
       const hasCatalogNumber = book.id;
-      return hasPublicationYear && hasAuthor && hasCatalogNumber;
+      return hasVolumeInfo && hasPublicationYear && hasAuthor && hasCatalogNumber;
     });
 
     this.sortedBooks = this.sortBooks(filteredBooks);
@@ -89,10 +98,14 @@ export class BookListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.booksChangedSub.unsubscribe();
   }
 
   onNewBook() {
     this.router.navigate(['new'], {relativeTo: this.route});
+  }
+
+  onBookClick(book: any): void {
+    this.router.navigate([book], {relativeTo: this.route});
   }
 }

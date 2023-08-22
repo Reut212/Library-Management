@@ -24,7 +24,7 @@
       </select>
     </div>
     <hr>
-    <div *ngFor="let book of sortedBooks">
+    <div *ngFor="let book of sortedBooks" (click)="onBookClick(book.id)">
       <h2>{{ book.volumeInfo.title }}</h2>
       <p>Authors: {{ book.volumeInfo.authors.join(', ') }}</p>
       <p>Publisher: {{ book.volumeInfo.publisher }}</p>

@@ -9,8 +9,17 @@ import { BooksService } from '../books.service';
   styleUrls: ['./book-detail.component.css']
 })
 export class BookDetailComponent implements OnInit {
-  book: Book;
+  book: Book = {
+    title: '',
+    description: '',
+    authors: [],
+    imageLinks: {
+      thumbnail: ''
+    },
+    bookDetailes: []
+  };
   bookId: string;
+  isLoading: boolean = true;
 
   constructor(
     private bookService: BooksService,
@@ -18,17 +27,23 @@ export class BookDetailComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      this.bookId = params.get('id');
-      this.fetchBookDetails(this.bookId);
+    this.route.paramMap.subscribe(params => {
+      const bookId = params.get('id');
+      this.fetchBookDetails(bookId);
     });
   }
 
   fetchBookDetails(bookId: string): void {
-    // Use the book service to fetch detailed book information
-    this.bookService.getBookDetails(bookId).subscribe((data) => {
-      this.book = data; // Store the book details in the 'book' property
-    });
+    this.bookService.getBookDetailsFromAPI(bookId).subscribe(
+      (data: any) => {
+        this.book = data.volumeInfo;
+        this.isLoading = false; // Set isLoading to false when data is available
+      },
+      (error) => {
+        console.error(error);
+        this.isLoading = false; // Set isLoading to false even if there's an error
+      }
+    );
   }
 
   onAddToLibraryList() {
