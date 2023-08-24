@@ -16,6 +16,7 @@ export class BookListComponent implements OnInit, OnDestroy {
   searchQuery: string = '';
   sortOption: string = 'authors';
   sortedBooks: Book[] = [];
+  booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
 
 
   constructor(
@@ -53,6 +54,13 @@ export class BookListComponent implements OnInit, OnDestroy {
       return hasPublicationYear && hasAuthor && hasCatalogNumber;
     });
     this.sortedBooks = this.sortBooks(filteredBooks);
+    this.updateBookListWithStorage();
+  }
+
+  updateBookListWithStorage() {
+    for(let book of this.booksFromStorage){
+      this.sortedBooks.unshift(book)
+    }
   }
 
   sortBooks(books: any[]): any[] {

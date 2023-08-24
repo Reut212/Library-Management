@@ -35,7 +35,7 @@ export class BooksService {
 
   }
 
-  getBooks(query: string): Observable<any> {
+  getBooks(query: string): Observable<Book[]> {
     const url = `${this.apiUrl}?q=${query}&key=${this.apiKey}`;
     return this.http.get(url).pipe(map((response: any) => {
       const items = response.items || [];
@@ -57,7 +57,7 @@ export class BooksService {
     }));
   }
 
-  getBookDetailsFromAPI(bookID: string): Observable<any> {
+  getBookDetailsFromAPI(bookID: string): Observable<Book> {
     const url = `${this.apiUrl}/${bookID}?key=${this.apiKey}`;
     return this.http.get(url).pipe(map((response: any) => {
         const volumeInfo = response.volumeInfo;
