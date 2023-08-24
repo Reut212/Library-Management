@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Book } from '../book.model';
 import { BooksService } from '../books.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-book-detail',
@@ -9,17 +10,11 @@ import { BooksService } from '../books.service';
   styleUrls: ['./book-detail.component.css']
 })
 export class BookDetailComponent implements OnInit {
-  book: Book = {
-    title: '',
-    description: '',
-    authors: [],
-    imageLinks: {
-      thumbnail: ''
-    },
-    bookDetailes: []
-  };
+  books:any[] = [];
+  book: Book;
   bookId: string;
   isLoading: boolean = true;
+  ableToFetch: boolean = false;
 
   constructor(
     private bookService: BooksService,
@@ -27,28 +22,53 @@ export class BookDetailComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const bookId = params.get('id');
-      this.fetchBookDetails(bookId);
-    });
+    this.registerToBookAddStream();
+    this.registerToRouteChangesStream();
   }
 
-  fetchBookDetails(bookId: string): void {
-    this.bookService.getBookDetailsFromAPI(bookId).subscribe(
-      (data: any) => {
-        this.book = data.volumeInfo;
-        this.isLoading = false; // Set isLoading to false when data is available
-      },
-      (error) => {
-        console.error(error);
-        this.isLoading = false; // Set isLoading to false even if there's an error
+  registerToRouteChangesStream(): void {
+    this.route.paramMap.subscribe(params => {
+      const bookId = params.get('id');
+      if(bookId.startsWith('manually_added')){
+        this.isLoading = false;
+        console.log("this.book ==== ",  this.book);
+        var currentBook = this.bookService.books.find(book => book.id === bookId);
+        if (!!currentBook) {
+          this.book = currentBook;
+        }
+      } else {
+      this.fetchBookDetailsFromAPI(bookId);
+    }});
+  }
+
+  registerToBookAddStream(): void {
+    this.bookService.booksChanged.subscribe(
+      (updatedBooks: Book[]) => {
+        if (updatedBooks.length > 0) {
+          this.book = updatedBooks[0];
+          console.log("Updated book:", this.book);
+        }
       }
     );
   }
 
-  onAddToLibraryList() {
-    this.bookService.addBookToLibraryList(this.book.bookDetailes);
+  fetchBookDetailsFromAPI(bookId: string): void {
+    this.bookService.getBookDetailsFromAPI(bookId).subscribe(
+      (data: any) => {
+        this.book = data;
+        console.log(this.book)
+        this.isLoading = false;
+      },
+      (error) => {
+        console.error(error);
+        this.isLoading = false;
+      }
+    );
   }
+
+  // onAddToLibraryList() {
+  //   this.bookService.addBookToLibraryList(this.book.bookDetailes);
+  // }
 
   onEditBook() {
     this.router.navigate(['edit'], {relativeTo: this.route});

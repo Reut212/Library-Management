@@ -3,11 +3,13 @@
     <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="col-xs-12">
+          <div class="btn-toolbar">
           <button
             type="submit"
             class="btn btn-success"
             [disabled]="!bookForm.valid">Save</button>
           <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+        </div>
         </div>
       </div>
       <div class="row">
@@ -21,8 +23,32 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
+            <label for="name">Authors</label>
+            <input type="text" id="authors" formControlName="authors" class="form-control">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label for="name">Publisher</label>
+            <input type="text" id="publisher" formControlName="publisher" class="form-control">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label for="name">Catalog Number</label>
+            <input type="text" id="catalogNumber" formControlName="catalogNumber" class="form-control">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group">
             <label for="name">Published Date</label>
-            <input type="text" id="publishedDate" formControlName="name" class="form-control">
+            <input type="text" id="publishedDate" formControlName="publishedDate" class="form-control">
           </div>
         </div>
       </div>
@@ -47,7 +73,7 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-xs-12" formArrayName="bookDetailes">
           <div
             class="row"
@@ -77,7 +103,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </form>
   </div>
 </div>

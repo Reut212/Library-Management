@@ -5,11 +5,11 @@
   class="list-group-item clearfix">
     <div class="pull-left">
       <h4 class="list-group-item-heading">{{ book.title }}</h4>
-      <p class="list-group-item-text">{{ book.description }}</p>
+      <!-- <p class="list-group-item-text">{{ book.description }}</p> -->
     </div>
     <span class="pull-right">
       <img
-      [src]="book.imageLinks?.thumbnail"
+      [src]="book.imageLinks"
       alt="{{ book.title }}"
       class="img-responsive"
       style="max-height: 50px;">

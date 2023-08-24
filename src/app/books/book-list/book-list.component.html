@@ -24,15 +24,17 @@
       </select>
     </div>
     <hr>
+    <!-- <pre>{{sortedBooks | json}}</pre> -->
     <div *ngFor="let book of sortedBooks" (click)="onBookClick(book.id)">
-      <h2>{{ book.volumeInfo.title }}</h2>
-      <p>Authors: {{ book.volumeInfo.authors.join(', ') }}</p>
-      <p>Publisher: {{ book.volumeInfo.publisher }}</p>
+      <h2>{{ book.title }}</h2>
+      <p>Authors: {{ book.authors }}</p>
+      <p>Publisher: {{ book.publisher }}</p>
       <p>Catalog Number: {{ book.id }}</p>
       <img
-        *ngIf="book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail"
-        [src]="book.volumeInfo.imageLinks.thumbnail"
-        alt="{{ book.volumeInfo.title }} cover"
+        *ngIf="book.imageLinks || book.imageLinks.thumbnail"
+        [src]="book.imageLinks.thumbnail || book.imageLinks"
+        width="128" height="202"
+        alt="{{ book.title }} cover"
       />
       <hr>
       </div>
