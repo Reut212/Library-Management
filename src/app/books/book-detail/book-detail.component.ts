@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Book } from '../book.model';
 import { BooksService } from '../books.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-book-detail',
@@ -15,6 +14,7 @@ export class BookDetailComponent implements OnInit {
   bookId: string;
   isLoading: boolean = true;
   ableToFetch: boolean = false;
+  booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
 
   constructor(
     private bookService: BooksService,
@@ -31,7 +31,6 @@ export class BookDetailComponent implements OnInit {
       const bookId = params.get('id');
       if(bookId.startsWith('manually_added')){
         this.isLoading = false;
-        console.log("this.book ==== ",  this.book);
         var currentBook = this.bookService.books.find(book => book.id === bookId);
         if (!!currentBook) {
           this.book = currentBook;
@@ -45,6 +44,7 @@ export class BookDetailComponent implements OnInit {
     this.bookService.booksChanged.subscribe(
       (updatedBooks: Book[]) => {
         if (updatedBooks.length > 0) {
+          this.isLoading = false;
           this.book = updatedBooks[0];
           console.log("Updated book:", this.book);
         }
@@ -75,7 +75,7 @@ export class BookDetailComponent implements OnInit {
   }
 
   onDeleteBook() {
-    this.bookService.deleteBook(this.bookId);
+    this.bookService.deleteBook(this.book.id);
     this.router.navigate(['/books']);
   }
 }

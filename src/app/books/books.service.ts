@@ -74,10 +74,6 @@ export class BooksService {
       }))
   }
 
-  // getBooks() {
-  //   return this.books.slice();
-  // }
-
   getBook(id: number) {
     return this.books[id];
   }
@@ -99,18 +95,29 @@ export class BooksService {
     this.booksChanged.emit(this.books.slice());
   }
 
-  // getBooksFromStorage() {
-  //   var booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
-  //   console.log("books from storage: ", booksFromStorage.values);
-  //   this.books = booksFromStorage;
-  // }
-
   updateBook(index: number, newBook: Book) {
     this.books[index] = newBook;
     this.booksChanged.next(this.books.slice());
   }
 
   deleteBook(bookID: string) {
-    const chosenBook = `${this.apiUrl}/${bookID}?key=${this.apiKey}`;
+    const bookIndex = this.books.findIndex(book => book.id === bookID);
+    if (bookIndex !== -1) {
+      this.books.splice(bookIndex, 1);
+      if (bookID.startsWith('manually_added')){
+        this.deleteBookFromLocalStorage(bookID);
+      } else {
+
+      }
+    }
+  }
+
+  deleteBookFromLocalStorage(bookId: string) {
+    var booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
+    const chosenBook = booksFromStorage.findIndex(book => book.id === bookId);
+    if (chosenBook !== -1) {
+      booksFromStorage.splice(chosenBook, 1);
+      localStorage.setItem('booksList', JSON.stringify(booksFromStorage));
+    }
   }
 }

@@ -40,14 +40,13 @@ export class BookListComponent implements OnInit, OnDestroy {
     const defaultQuery = 'a';
     this.bookService.getBooks(defaultQuery).subscribe((data) => {
       this.books = data;
-      console.log("this.books",this.books)
+      console.log("this.books",this.books);
       this.filterAndSortBooks();
     });
   }
 
   filterAndSortBooks(): void {
     const filteredBooks = this.books.filter((book) => {
-      // const hasVolumeInfo = book.volumeInfo && typeof book.volumeInfo === 'object';
       const hasPublicationYear = book.publishedDate;
       const hasAuthor = book.authors && book.authors.length > 0;
       const hasCatalogNumber = book.id;
@@ -55,12 +54,14 @@ export class BookListComponent implements OnInit, OnDestroy {
     });
     this.sortedBooks = this.sortBooks(filteredBooks);
     this.updateBookListWithStorage();
+    this.bookService.books = this.sortedBooks;
   }
 
   updateBookListWithStorage() {
     for(let book of this.booksFromStorage){
-      this.sortedBooks.unshift(book)
+      this.sortedBooks.unshift(book);
     }
+    this.bookService.books = this.sortedBooks;
   }
 
   sortBooks(books: any[]): any[] {
@@ -99,23 +100,22 @@ export class BookListComponent implements OnInit, OnDestroy {
   }
 
   searchBooks(): void {
-    if (this.searchQuery.trim() !== '') {
-      this.bookService.getBooks(this.searchQuery).subscribe((data) => {
-        // this.books = data.items;
-        this.filterBooks();
-      });
-    } else {
-      // Show all books when the search bar is empty
-      this.fetchAllBooks();
-    }
+  if (this.searchQuery.trim() !== '') {
+    this.bookService.getBooks(this.searchQuery).subscribe((data) => {
+      this.updateSortedBooks(data);
+    });
+  } else {
+    this.fetchAllBooks();
   }
+}
 
-  filterBooks(): void {
-    this.sortedBooks = this.books.filter((book) => {
+  updateSortedBooks(newBooks: any[]): void {
+    const filteredBooks = newBooks.filter((book) => {
       const hasPublicationYear = book.publishedDate;
       const hasAuthor = book.authors && book.authors.length > 0;
       const hasCatalogNumber = book.id;
       return hasPublicationYear && hasAuthor && hasCatalogNumber;
     });
+    this.sortedBooks = this.sortBooks(filteredBooks);
   }
 }
