@@ -37,7 +37,7 @@ export class BookListComponent implements OnInit, OnDestroy {
     }
 
   fetchAllBooks(): void {
-    const defaultQuery = 'a';
+    const defaultQuery = '0';
     this.bookService.getBooks(defaultQuery).subscribe((data) => {
       this.books = data;
       console.log("this.books",this.books);
