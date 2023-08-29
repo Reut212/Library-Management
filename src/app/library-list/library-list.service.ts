@@ -3,13 +3,12 @@ import { BookDetailes } from '../shared/bookDetailes.model';
 import { Subject } from 'rxjs';
 
 export class LibraryListService {
-//MANAGE OUR SHOPPING LIST - ADD INGRIDIENT METHOD
   bookAdded = new Subject<BookDetailes[]>();
   startedEditing = new Subject<number>();
 
   private bookDetails: BookDetailes[] = [
-    new BookDetailes('Ned Blackhawk', 1995),
-    new BookDetailes('Ned Blackhawk', 1995)
+    new BookDetailes('Ned Blackhawk', '1995'),
+    new BookDetailes('Ned Blackhawk', '1995')
   ];
 
   getBookDetailes() {
@@ -25,8 +24,8 @@ export class LibraryListService {
     this.bookAdded.next(this.bookDetails.slice());
   }
 
-  addBookDetail(bookDetails: BookDetailes[]) {
-    this.bookDetails.push(...bookDetails);
+  addBookDetail(bookDetails: BookDetailes) {
+    this.bookDetails.push(bookDetails);
     this.bookAdded.next(this.bookDetails.slice())
   }
 

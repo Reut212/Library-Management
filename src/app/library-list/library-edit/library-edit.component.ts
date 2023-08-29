@@ -31,7 +31,7 @@ export class LibraryEditComponent implements OnInit, OnDestroy {
         this.editedItem = this.libraryListService.getBookDetail(index);
         this.libraryListForm.setValue({
           name: this.editedItem.name,
-          yearOfPublish: this.editedItem.yearOfPublish
+          authors: this.editedItem.authors
         })
       }
     );
@@ -40,7 +40,7 @@ export class LibraryEditComponent implements OnInit, OnDestroy {
 
   onSubmit(form: NgForm) {
     const value = form.value;
-    const newBookDetail = new BookDetailes(value.name, value.yearOfPublish);
+    const newBookDetail = new BookDetailes(value.name, value.authors);
     if (this.editMode) {
       this.libraryListService.updateBookDeatil(this.editedItemIndex, newBookDetail);
       this.editMode = false;

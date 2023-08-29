@@ -16,7 +16,7 @@
     </div>
     <div>
       <br>
-      <label for="sort">Sort by:</label>
+      <label for="sort">Sort by:&nbsp;</label>
       <select id="sort" [(ngModel)]="sortOption" (change)="onSortOptionChange()">
         <option value="author">Author</option>
         <option value="publishedDate">Publication Date</option>
@@ -31,7 +31,7 @@
       <p>Publisher: {{ book.publisher }}</p>
       <p>Catalog Number: {{ book.id }}</p>
       <img
-        *ngIf="book.imageLinks || book.imageLinks.thumbnail"
+        *ngIf="book.imageLinks"
         [src]="book.imageLinks.thumbnail || book.imageLinks"
         width="128" height="202"
         alt="{{ book.title }} cover"

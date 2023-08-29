@@ -2,19 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Book } from '../book.model';
 import { BooksService } from '../books.service';
+import { BookDetailes } from 'src/app/shared/bookDetailes.model';
 
 @Component({
   selector: 'app-book-detail',
   templateUrl: './book-detail.component.html',
   styleUrls: ['./book-detail.component.css']
 })
+
 export class BookDetailComponent implements OnInit {
-  books:any[] = [];
+  books:Book[] = [];
   book: Book;
   bookId: string;
   isLoading: boolean = true;
   ableToFetch: boolean = false;
   booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
+  bookDetail: BookDetailes;
 
   constructor(
     private bookService: BooksService,
@@ -24,6 +27,7 @@ export class BookDetailComponent implements OnInit {
   ngOnInit(): void {
     this.registerToBookAddStream();
     this.registerToRouteChangesStream();
+    this.updateBookDetail(this.book);
   }
 
   registerToRouteChangesStream(): void {
@@ -54,7 +58,7 @@ export class BookDetailComponent implements OnInit {
 
   fetchBookDetailsFromAPI(bookId: string): void {
     this.bookService.getBookDetailsFromAPI(bookId).subscribe(
-      (data: any) => {
+      (data: Book) => {
         this.book = data;
         console.log(this.book)
         this.isLoading = false;
@@ -66,15 +70,18 @@ export class BookDetailComponent implements OnInit {
     );
   }
 
-  // onAddToLibraryList() {
-  //   this.bookService.addBookToLibraryList(this.book.bookDetailes);
-  // }
+  updateBookDetail(book: Book): void {
+    this.bookDetail = new BookDetailes(book.title, book.authors);
+  }
+  onAddToLibraryList(): void {
+    this.bookService.addBookToLibraryList(this.bookDetail);
+  }
 
-  onEditBook() {
+  onEditBook(): void {
     this.router.navigate(['edit'], {relativeTo: this.route});
   }
 
-  onDeleteBook() {
+  onDeleteBook(): void {
     this.bookService.deleteBook(this.book.id);
     this.router.navigate(['/books']);
   }

@@ -11,7 +11,7 @@ import { BookDetailes } from 'src/app/shared/bookDetailes.model';
   styleUrls: ['./book-edit.component.css']
 })
 export class BookEditComponent implements OnInit {
-  id: number;
+  id: string;
   editMode = false;
   bookForm: FormGroup;
   book: Book;
@@ -24,7 +24,7 @@ export class BookEditComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(
       (params: Params) => {
-        this.id = +params['id'];
+        this.id = params['id'];
         this.editMode = params['id'] != null;
         this.initForm();
       }
@@ -33,7 +33,10 @@ export class BookEditComponent implements OnInit {
 
   onSubmit() {
     console.log('raw',this.bookForm.getRawValue());
-    const uniqueId = 'manually_added_' + Date.now().toString();
+    let uniqueId = 'manually_added_' + Date.now().toString();
+    if(this.editMode){
+      uniqueId = this.id;
+    }
     const newBook = new Book(
       uniqueId,
       this.bookForm.value['name'],
@@ -64,7 +67,6 @@ export class BookEditComponent implements OnInit {
     let catalogNumber: string;
     let publishedDate: string;
     let bookDescription = '';
-    // let bookDetailes = new FormArray([]);
 
     if (this.editMode) {
       const book = this.bookService.getBook(this.id);
@@ -75,19 +77,6 @@ export class BookEditComponent implements OnInit {
       catalogNumber = book.id || '';;
       publishedDate = book.publishedDate || '';;
       bookDescription = book.description;
-      // if (book['bookDetailes']) {
-      //   for (let bookDetail of book.bookDetailes) {
-      //     bookDetailes.push(
-      //       new FormGroup({
-      //         'name': new FormControl(bookDetail.name, Validators.required),
-      //         'yearOfPublish': new FormControl(bookDetail.yearOfPublish, [
-      //           Validators.required,
-      //           Validators.pattern(/^[1-9]+[0-9]*$/)
-      //         ])
-      //       })
-      //     );
-      //   }
-      // }
     }
     this.bookForm = new FormGroup({
       'name': new FormControl(bookName, Validators.required),
@@ -97,7 +86,6 @@ export class BookEditComponent implements OnInit {
       'publishedDate': new FormControl(publishedDate, Validators.required),
       'imagePath': new FormControl(imageLinks, Validators.required),
       'description': new FormControl(bookDescription, Validators.required),
-      // 'bookDetailes': bookDetailes
     });
   }
 
@@ -105,23 +93,7 @@ export class BookEditComponent implements OnInit {
     return (<FormArray>this.bookForm.get('bookDetailes')).controls;
   }
 
-  onAddBookDetail() {
-    (<FormArray>this.bookForm.get('bookDetailes')).push(
-      new FormGroup({
-        'name': new FormControl(null, Validators.required),
-        'yearOfPublish': new FormControl(null, [
-          Validators.required,
-          Validators.pattern(/^[1-9]+[0-9]*$/)
-        ])
-      })
-    )
-  }
-
   onCancel() {
     this.router.navigate(['../'], {relativeTo: this.route});
-  }
-
-  onDeleteBookDetail(index: number) {
-    (<FormArray>this.bookForm.get('bookDetailes')).removeAt(index);
   }
 }

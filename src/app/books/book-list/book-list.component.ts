@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs-compat';
 import { BooksService } from '../books.service';
 import { Book } from '../book.model';
+import { BookDetailes } from 'src/app/shared/bookDetailes.model';
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
@@ -61,10 +62,9 @@ export class BookListComponent implements OnInit, OnDestroy {
     for(let book of this.booksFromStorage){
       this.sortedBooks.unshift(book);
     }
-    this.bookService.books = this.sortedBooks;
   }
 
-  sortBooks(books: any[]): any[] {
+  sortBooks(books: Book[]): Book[] {
     console.log('Sorting option:', this.sortOption);
 
     return books.sort((a, b) => {
@@ -95,7 +95,7 @@ export class BookListComponent implements OnInit, OnDestroy {
     this.router.navigate(['new'], {relativeTo: this.route});
   }
 
-  onBookClick(book: any): void {
+  onBookClick(book: Book): void {
     this.router.navigate([book], {relativeTo: this.route});
   }
 
@@ -109,7 +109,7 @@ export class BookListComponent implements OnInit, OnDestroy {
   }
 }
 
-  updateSortedBooks(newBooks: any[]): void {
+  updateSortedBooks(newBooks: Book[]): void {
     const filteredBooks = newBooks.filter((book) => {
       const hasPublicationYear = book.publishedDate;
       const hasAuthor = book.authors && book.authors.length > 0;
