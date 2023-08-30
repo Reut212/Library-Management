@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
 import { BookDetailes } from 'src/app/shared/bookDetailes.model';
 import { LibraryListService } from '../library-list.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-library-edit',
@@ -17,11 +17,6 @@ export class LibraryEditComponent implements OnInit, OnDestroy {
   editedItem: BookDetailes;
 
   constructor(private libraryListService: LibraryListService) { }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe;
-  }
-
 
   ngOnInit(): void {
     this.subscription = this.libraryListService.startedEditing.subscribe(
@@ -38,7 +33,7 @@ export class LibraryEditComponent implements OnInit, OnDestroy {
 
   }
 
-  onSubmit(form: NgForm) {
+  onSubmit(form: NgForm): void {
     const value = form.value;
     const newBookDetail = new BookDetailes(value.name, value.authors);
     if (this.editMode) {
@@ -50,12 +45,17 @@ export class LibraryEditComponent implements OnInit, OnDestroy {
     form.reset();
   }
 
-  onClear() {
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe;
+  }
+
+  onClear(): void {
     this.libraryListForm.reset();
     this.editMode = false;
   }
 
-  onDelete() {
+  onDelete(): void {
     this.onClear();
     this.libraryListService.deleteBookDetail(this.editedItemIndex);
   }

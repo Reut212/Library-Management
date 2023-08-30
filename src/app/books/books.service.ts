@@ -1,11 +1,11 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
 import { LibraryListService } from '../library-list/library-list.service';
 import { BookDetailes } from '../shared/bookDetailes.model';
 import { Book } from './book.model';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class BooksService {
@@ -58,7 +58,7 @@ export class BooksService {
       }))
   }
 
-  getBook(id: string) : Book {
+  getBook(id: string): Book {
     if (id.startsWith('manually_added')){
       var booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
       const chosenBook = booksFromStorage.find(book => book.id === id);
@@ -67,7 +67,7 @@ export class BooksService {
     return this.books[id];
   }
 
-  addBook(newBook: Book) {
+  addBook(newBook: Book): void {
     var booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
     if (!booksFromStorage) {
       booksFromStorage = [];
@@ -79,7 +79,7 @@ export class BooksService {
     this.booksChanged.emit(this.books.slice());
   }
 
-  updateBook(id: string, newBook: Book) {
+  updateBook(id: string, newBook: Book): void {
     if (id.startsWith('manually_added')){
       const booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
       const updatedBooks = booksFromStorage.map((book: Book) => {
@@ -132,7 +132,7 @@ export class BooksService {
     );
   }
 
-  addBookToLibraryList(bookDetail: BookDetailes) {
+  addBookToLibraryList(bookDetail: BookDetailes): void {
     this.libraryListService.addBookDetail(bookDetail);
   }
 }

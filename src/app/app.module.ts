@@ -13,7 +13,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownDirective } from './shared/dropdown.directive';
 import { LibraryListService } from './library-list/library-list.service';
 import { AppRoutingModule } from './app-routing.module';
-import { BookStartComponent } from './books/book-start/book-start.component';
 import { BookEditComponent } from './books/book-edit/book-edit.component';
 import { BooksService } from './books/books.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -29,7 +28,6 @@ import { HttpClientModule } from '@angular/common/http';
     LibraryListComponent,
     LibraryEditComponent,
     DropdownDirective,
-    BookStartComponent,
     BookEditComponent,
   ],
   imports: [

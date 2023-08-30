@@ -58,7 +58,7 @@ export class BookListComponent implements OnInit, OnDestroy {
     this.bookService.books = this.sortedBooks;
   }
 
-  updateBookListWithStorage() {
+  updateBookListWithStorage(): void {
     for(let book of this.booksFromStorage){
       this.sortedBooks.unshift(book);
     }
@@ -91,7 +91,7 @@ export class BookListComponent implements OnInit, OnDestroy {
     this.booksChangedSub.unsubscribe();
   }
 
-  onNewBook() {
+  onNewBook(): void {
     this.router.navigate(['new'], {relativeTo: this.route});
   }
 

@@ -31,7 +31,7 @@ export class BookEditComponent implements OnInit {
     )
   }
 
-  onSubmit() {
+  onSubmit(): void {
     console.log('raw',this.bookForm.getRawValue());
     let uniqueId = 'manually_added_' + Date.now().toString();
     if(this.editMode){
@@ -59,7 +59,7 @@ export class BookEditComponent implements OnInit {
     this.onCancel();
   }
 
-  private initForm() {
+  private initForm(): void {
     let bookName = '';
     let imageLinks: string;
     let authors: string;
