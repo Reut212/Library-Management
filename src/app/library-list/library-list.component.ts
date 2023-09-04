@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { BookDetailes } from '../shared/bookDetailes.model';
 import { LibraryListService } from './library-list.service';
+import { Subscription } from 'rxjs-compat';
 
 @Component({
   selector: 'app-library-list',
