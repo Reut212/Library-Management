@@ -52,12 +52,6 @@ export class BookListComponent implements OnInit, OnDestroy {
       const hasPublicationYear = book.publishedDate;
       const hasAuthor = book.authors && book.authors.length > 0;
       const hasCatalogNumber = book.id;
-      if(hasPublicationYear && hasAuthor && hasCatalogNumber){
-        console.log(book);
-        true
-      } else {
-        false
-      }
       return hasPublicationYear && hasAuthor && hasCatalogNumber;
     });
     this.sortedBooks = this.sortBooks(filteredBooks);
