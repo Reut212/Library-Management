@@ -37,6 +37,7 @@ export class BookDetailComponent implements OnInit {
         var currentBook = this.bookService.books.find(book => book.id === bookId);
         if (!!currentBook) {
           this.book = currentBook;
+          this.updateBookDetail(this.book);
         }
       } else {
       this.fetchBookDetailsFromAPI(bookId);
@@ -58,6 +59,7 @@ export class BookDetailComponent implements OnInit {
     this.bookService.getBookDetailsFromAPI(bookId).subscribe(
       (data: Book) => {
         this.book = data;
+        this.updateBookDetail(this.book);
         console.log(this.book)
         this.isLoading = false;},
       (error) => {
