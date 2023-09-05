@@ -12,7 +12,6 @@ import { ThrowStmt } from '@angular/compiler';
 })
 
 export class BookListComponent implements OnInit, OnDestroy {
-  editMode = false;
   books:Book[] = [];
   private booksChangedSub: Subscription;
   subscription: Subscription;
@@ -28,7 +27,6 @@ export class BookListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute) { }
 
     ngOnInit(): void {
-      this.editMode = false;
       this.booksChangedSub = this.bookService.booksChanged.subscribe(
         (updatedBooks: Book[]) => {
           console.log('updatedBooks', updatedBooks);
@@ -97,7 +95,6 @@ export class BookListComponent implements OnInit, OnDestroy {
   }
 
   onNewBook(): void {
-    this.editMode = true;
     this.router.navigate(['new'], {relativeTo: this.route});
   }
 
