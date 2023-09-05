@@ -6,10 +6,7 @@ export class LibraryListService {
   bookAdded = new Subject<BookDetailes[]>();
   startedEditing = new Subject<number>();
 
-  private bookDetails: BookDetailes[] = [
-    new BookDetailes('Ned Blackhawk', '1995'),
-    new BookDetailes('Ned Blackhawk', '1995')
-  ];
+  private bookDetails: BookDetailes[] = [];
 
   getBookDetailes(): BookDetailes[] {
     return this.bookDetails.slice();
