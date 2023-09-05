@@ -19,7 +19,7 @@ export class BooksService {
 
   constructor(private libraryListService: LibraryListService, private http: HttpClient){}
 
-  getBooks(query: string): Observable<Book[]> {
+  getBooksFromAPI(query: string): Observable<Book[]> {
     const url = `${this.apiUrl}?q=${query}&key=${this.apiKey}`;
     return this.http.get(url).pipe(map((response: any) => {
       const items = response.items || [];

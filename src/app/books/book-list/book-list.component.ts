@@ -3,9 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs-compat';
 import { BooksService } from '../books.service';
 import { Book } from '../book.model';
-import { BookDetailes } from 'src/app/shared/bookDetailes.model';
-import { ThrowStmt } from '@angular/compiler';
-import { concat } from 'rxjs-compat/operator/concat';
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
@@ -39,7 +36,7 @@ export class BookListComponent implements OnInit, OnDestroy {
 
   fetchAllBooks(): void {
     const defaultQuery = '0';
-    this.bookService.getBooks(defaultQuery).subscribe((data) => {
+    this.bookService.getBooksFromAPI(defaultQuery).subscribe((data) => {
       this.books = [...this.books, ...data]
       this.filterAndSortBooks();
       this.updateBookListWithStorage();
@@ -101,7 +98,7 @@ export class BookListComponent implements OnInit, OnDestroy {
 
   searchBooks(): void {
   if (this.searchQuery.trim() !== '') {
-    this.bookService.getBooks(this.searchQuery).subscribe((data) => {
+    this.bookService.getBooksFromAPI(this.searchQuery).subscribe((data) => {
       this.updateSortedBooks(data);
     });
   } else {
