@@ -5,6 +5,7 @@ import { BooksService } from '../books.service';
 import { Book } from '../book.model';
 import { BookDetailes } from 'src/app/shared/bookDetailes.model';
 import { ThrowStmt } from '@angular/compiler';
+import { concat } from 'rxjs-compat/operator/concat';
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
@@ -29,9 +30,7 @@ export class BookListComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
       this.booksChangedSub = this.bookService.booksChanged.subscribe(
         (updatedBooks: Book[]) => {
-          console.log('updatedBooks', updatedBooks);
-          this.books = updatedBooks.concat(this.books);
-          console.log('this.books', this.books)
+          this.books= updatedBooks;
           this.filterAndSortBooks();
         }
       );
@@ -41,21 +40,27 @@ export class BookListComponent implements OnInit, OnDestroy {
   fetchAllBooks(): void {
     const defaultQuery = '0';
     this.bookService.getBooks(defaultQuery).subscribe((data) => {
-      this.books = data;
-      console.log("this.books",this.books);
+      this.books = [...this.books, ...data]
       this.filterAndSortBooks();
+      this.updateBookListWithStorage();
     });
   }
 
   filterAndSortBooks(): void {
     const filteredBooks = this.books.filter((book) => {
+      console.log()
       const hasPublicationYear = book.publishedDate;
       const hasAuthor = book.authors && book.authors.length > 0;
       const hasCatalogNumber = book.id;
+      if(hasPublicationYear && hasAuthor && hasCatalogNumber){
+        console.log(book);
+        true
+      } else {
+        false
+      }
       return hasPublicationYear && hasAuthor && hasCatalogNumber;
     });
     this.sortedBooks = this.sortBooks(filteredBooks);
-    this.updateBookListWithStorage();
     this.bookService.books = this.sortedBooks;
   }
 
@@ -68,8 +73,6 @@ export class BookListComponent implements OnInit, OnDestroy {
   }
 
   sortBooks(books: Book[]): Book[] {
-    console.log('Sorting option:', this.sortOption);
-
     return books.sort((a, b) => {
       if (this.sortOption === 'author') {
         const authorsA = a.authors;
