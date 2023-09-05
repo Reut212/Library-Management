@@ -3,7 +3,6 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Book } from '../book.model';
 import { BooksService } from '../books.service';
-import { BookDetailes } from 'src/app/shared/bookDetailes.model';
 
 @Component({
   selector: 'app-book-edit',

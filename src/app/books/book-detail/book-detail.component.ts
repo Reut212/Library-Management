@@ -27,7 +27,6 @@ export class BookDetailComponent implements OnInit {
   ngOnInit(): void {
     this.registerToBookAddStream();
     this.registerToRouteChangesStream();
-    this.updateBookDetail(this.book);
   }
 
   registerToRouteChangesStream(): void {
@@ -50,7 +49,6 @@ export class BookDetailComponent implements OnInit {
         if (updatedBooks.length > 0) {
           this.isLoading = false;
           this.book = updatedBooks[0];
-          console.log("Updated book:", this.book);
         }
       }
     );
@@ -61,8 +59,7 @@ export class BookDetailComponent implements OnInit {
       (data: Book) => {
         this.book = data;
         console.log(this.book)
-        this.isLoading = false;
-      },
+        this.isLoading = false;},
       (error) => {
         console.error(error);
         this.isLoading = false;

@@ -1,4 +1,4 @@
-<div class="fixed-component scrollable-area">
+<div class="scrollable-area wrapper">
   <div class="row">
     <div class="col-xs-12">
       <div *ngIf="isLoading" class="text-center">
@@ -10,7 +10,7 @@
         [src]="book.imageLinks?.thumbnail || book.imageLinks"
         alt="{{ book.title }}"
         class="img-responsive"
-        style="max-height: 300px;">
+        width="128" height="202">
 
       <h1>{{ book.title }}</h1>
       <div [innerHTML]="book.description"></div>
@@ -36,3 +36,5 @@
     </div>
   </div>
 </div>
+<hr>
+

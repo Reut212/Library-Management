@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs-compat';
 import { BooksService } from '../books.service';
 import { Book } from '../book.model';
 import { BookDetailes } from 'src/app/shared/bookDetailes.model';
+import { ThrowStmt } from '@angular/compiler';
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
@@ -11,6 +12,7 @@ import { BookDetailes } from 'src/app/shared/bookDetailes.model';
 })
 
 export class BookListComponent implements OnInit, OnDestroy {
+  editMode = false;
   books:Book[] = [];
   private booksChangedSub: Subscription;
   subscription: Subscription;
@@ -26,6 +28,7 @@ export class BookListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute) { }
 
     ngOnInit(): void {
+      this.editMode = false;
       this.booksChangedSub = this.bookService.booksChanged.subscribe(
         (updatedBooks: Book[]) => {
           console.log('updatedBooks', updatedBooks);
@@ -59,8 +62,10 @@ export class BookListComponent implements OnInit, OnDestroy {
   }
 
   updateBookListWithStorage(): void {
-    for(let book of this.booksFromStorage){
-      this.sortedBooks.unshift(book);
+    if(this.booksFromStorage){
+      for(let book of this.booksFromStorage){
+        this.sortedBooks.unshift(book);
+      }
     }
   }
 
@@ -92,6 +97,7 @@ export class BookListComponent implements OnInit, OnDestroy {
   }
 
   onNewBook(): void {
+    this.editMode = true;
     this.router.navigate(['new'], {relativeTo: this.route});
   }
 
