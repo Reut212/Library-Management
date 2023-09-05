@@ -24,7 +24,7 @@ export class LibraryEditComponent implements OnInit, OnDestroy {
         this.editedItemIndex = index;
         this.editMode = true;
         this.editedItem = this.libraryListService.getBookDetail(index);
-        this.libraryListForm.setValue({
+        this.libraryListForm.form.patchValue({
           name: this.editedItem.name,
           authors: this.editedItem.authors
         })
