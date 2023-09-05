@@ -10,7 +10,7 @@
   position: fixed;
 }
 
-@media (min-width: 350px) {
+@media (max-width: 450px) {
   .wrapper{
     margin-right: auto;
   }
