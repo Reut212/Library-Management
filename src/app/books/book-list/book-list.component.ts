@@ -11,12 +11,9 @@ import { Book } from '../book.model';
 
 export class BookListComponent implements OnInit, OnDestroy {
   private booksChangedSub: Subscription;
-  subscription: Subscription;
   searchQuery: string = '';
   sortOption: string = 'authors';
   sortedBooks: Book[] = [];
-  booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
-
 
   constructor(
     private bookService: BooksService,
@@ -26,8 +23,7 @@ export class BookListComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
       this.booksChangedSub = this.bookService.booksChanged.subscribe(
         (updatedBooks: Book[]) => {
-          this.bookService.books= updatedBooks;
-          console.log("this.books inside book changed",this.bookService.books)
+          this.bookService.books = updatedBooks;
           this.filterAndSortBooks();
         }
       );
@@ -46,7 +42,6 @@ export class BookListComponent implements OnInit, OnDestroy {
   }
 
   filterAndSortBooks(): void {
-    console.log("this.bookService.books", this.bookService.books)
     const filteredBooks = this.bookService.books.filter((book) => {
       const hasPublicationDate = book.publishedDate;
       const hasAuthor = book.authors && book.authors.length > 0;
@@ -99,7 +94,6 @@ export class BookListComponent implements OnInit, OnDestroy {
 
         return titleMatches || authorMatches;
       });
-
       this.sortedBooks = this.sortBooks(filteredBooks);
     }
   }
