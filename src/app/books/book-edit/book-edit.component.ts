@@ -76,12 +76,7 @@ export class BookEditComponent implements OnInit {
       imageLinks = book.imageLinks;
       authors = book.authors;
       publisher = book.publisher || '';
-
-      // if(!bookFound){
-      //   catalogNumber = 'manually_added_' + Date.now().toString();
-      // } else {
       catalogNumber = book.id || 'manually_added_' + Date.now().toString();
-    // }
       publishedDate = book.publishedDate || '';
       bookDescription = book.description;
     }
