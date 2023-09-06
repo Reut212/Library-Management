@@ -87,7 +87,7 @@ export class BookEditComponent implements OnInit {
       'catalogNumber': new FormControl(catalogNumber, [
         Validators.required,
         Validators.minLength(12),
-        this.catalogNumberValidator.bind(this) // Add the custom validator
+        this.catalogNumberValidator.bind(this)
       ]),
       'publishedDate': new FormControl(publishedDate, Validators.required),
       'imagePath': new FormControl(imageLinks, Validators.required),
