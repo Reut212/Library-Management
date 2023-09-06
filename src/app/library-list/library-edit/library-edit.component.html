@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-xs-12">
-    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+    <form (ngSubmit)="onDelete(f)" #f="ngForm">
       <div class="row">
         <div class="col-xs-12">
           <button class="btn btn-danger button-spacing" type="button" (click)="onDelete()" *ngIf="editMode">Delete</button>

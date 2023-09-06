@@ -41,7 +41,6 @@ export class BooksService {
       }
       );
       this.books = books;
-      console.log("Books=", this.books)
       return books;
     }));
   }
@@ -59,7 +58,6 @@ export class BooksService {
     if (!this.booksFromStorage) {
       this.booksFromStorage = books;
       localStorage.setItem('booksList', JSON.stringify(this.booksFromStorage));
-      console.log("addAPIBooksToLocalStorage", this.booksFromStorage)
     }
   }
 
@@ -67,7 +65,6 @@ export class BooksService {
     this.booksFromStorage.push(newBook);
     localStorage.setItem('booksList', JSON.stringify(this.booksFromStorage));
     this.books = this.booksFromStorage;
-    console.log(this.books)
     this.booksChanged.emit(this.books.slice());
     this.bookSaved.emit(true);
   }
@@ -96,7 +93,6 @@ export class BooksService {
     if (bookIndex !== -1) {
       this.books.splice(bookIndex, 1);
     }
-    console.log(this.books)
     this.deleteBookFromLocalStorage(bookID);
     this.books = this.booksFromStorage;
   }
@@ -110,7 +106,6 @@ export class BooksService {
   }
 
   addBookToLibraryList(bookDetail: BookDetailes): void {
-    console.log("bookDetail", bookDetail);
     this.libraryListService.addBookDetail(bookDetail);
   }
 }

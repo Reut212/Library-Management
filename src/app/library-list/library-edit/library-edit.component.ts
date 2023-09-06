@@ -32,29 +32,17 @@ export class LibraryEditComponent implements OnInit, OnDestroy {
     );
   }
 
-  onSubmit(form: NgForm): void {
-    const value = form.value;
-    const newBookDetail = new BookDetailes(value.name, value.authors);
-    if (this.editMode) {
-      this.libraryListService.updateBookDeatil(this.editedItemIndex, newBookDetail);
-      this.editMode = false;
-    } else {
-    this.libraryListService.addNewBook(newBookDetail);
-    }
-    form.reset();
-  }
-
   ngOnDestroy() {
     this.subscription.unsubscribe;
+  }
+
+  onDelete(form: NgForm): void {
+    this.onClear();
+    this.libraryListService.deleteBookDetail(this.editedItemIndex);
   }
 
   onClear(): void {
     this.libraryListForm.reset();
     this.editMode = false;
-  }
-
-  onDelete(): void {
-    this.onClear();
-    this.libraryListService.deleteBookDetail(this.editedItemIndex);
   }
 }
