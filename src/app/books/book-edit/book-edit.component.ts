@@ -15,7 +15,6 @@ export class BookEditComponent implements OnInit {
   bookForm: FormGroup;
   book: Book;
   showSuccessAlert: boolean = false;
-  private
 
   constructor(
     private route: ActivatedRoute,
@@ -61,29 +60,40 @@ export class BookEditComponent implements OnInit {
   }
 
   private initForm(): void {
+    // console.log('raw',this.bookForm.getRawValue());
     let bookName = '';
     let imageLinks: string;
     let authors: string;
     let publisher: string;
-    let catalogNumber: string;
+    let catalogNumber: string = 'manually_added_' + Date.now().toString();
     let publishedDate: string;
     let bookDescription = '';
 
     if (this.editMode) {
       const book = this.bookService.getBook(this.id);
+      this.book = book;
       bookName = book.title;
       imageLinks = book.imageLinks;
       authors = book.authors;
-      publisher = book.publisher || '';;
-      catalogNumber = book.id || '';;
-      publishedDate = book.publishedDate || '';;
+      publisher = book.publisher || '';
+
+      // if(!bookFound){
+      //   catalogNumber = 'manually_added_' + Date.now().toString();
+      // } else {
+      catalogNumber = book.id || 'manually_added_' + Date.now().toString();
+    // }
+      publishedDate = book.publishedDate || '';
       bookDescription = book.description;
     }
     this.bookForm = new FormGroup({
       'name': new FormControl(bookName, Validators.required),
       'authors': new FormControl(authors, Validators.required),
       'publisher': new FormControl(publisher, Validators.required),
-      'catalogNumber': new FormControl(catalogNumber, Validators.minLength(12)),
+      'catalogNumber': new FormControl(catalogNumber, [
+        Validators.required,
+        Validators.minLength(12),
+        this.catalogNumberValidator.bind(this) // Add the custom validator
+      ]),
       'publishedDate': new FormControl(publishedDate, Validators.required),
       'imagePath': new FormControl(imageLinks, Validators.required),
       'description': new FormControl(bookDescription, Validators.required),
@@ -92,6 +102,15 @@ export class BookEditComponent implements OnInit {
 
   get controls() {
     return (<FormArray>this.bookForm.get('bookDetailes')).controls;
+  }
+
+  catalogNumberValidator(control: FormControl): { [s: string]: boolean } | null {
+    const catalogNumber = control.value;
+    if (this.editMode || this.bookService.isCatalogNumberUnique(catalogNumber)) {
+      return null;
+    } else {
+      return { catalogNumberExists: true };
+    }
   }
 
   onCancel() {

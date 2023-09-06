@@ -108,4 +108,9 @@ export class BooksService {
   addBookToLibraryList(bookDetail: BookDetailes): void {
     this.libraryListService.addBookDetail(bookDetail);
   }
+
+  isCatalogNumberUnique(catalogNumber: string): boolean {
+    // Check if the catalog number already exists in the list of books
+    return !this.books.some((book) => book.id === catalogNumber);
+  }
 }
