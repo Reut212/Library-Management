@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Book } from '../book.model';
@@ -14,11 +14,13 @@ export class BookEditComponent implements OnInit {
   editMode = false;
   bookForm: FormGroup;
   book: Book;
+  showSuccessAlert: boolean = false;
+  private
 
   constructor(
     private route: ActivatedRoute,
     private bookService: BooksService,
-    private router: Router) { }
+    private router: Router,) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(
@@ -81,7 +83,7 @@ export class BookEditComponent implements OnInit {
       'name': new FormControl(bookName, Validators.required),
       'authors': new FormControl(authors, Validators.required),
       'publisher': new FormControl(publisher, Validators.required),
-      'catalogNumber': new FormControl(catalogNumber, Validators.required),
+      'catalogNumber': new FormControl(catalogNumber, Validators.minLength(12)),
       'publishedDate': new FormControl(publishedDate, Validators.required),
       'imagePath': new FormControl(imageLinks, Validators.required),
       'description': new FormControl(bookDescription, Validators.required),

@@ -16,7 +16,6 @@ export class BookDetailComponent implements OnInit {
   bookId: string;
   isLoading: boolean = true;
   ableToFetch: boolean = false;
-  booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
   bookDetail: BookDetailes;
 
   constructor(
@@ -32,16 +31,13 @@ export class BookDetailComponent implements OnInit {
   registerToRouteChangesStream(): void {
     this.route.paramMap.subscribe(params => {
       const bookId = params.get('id');
-      if(bookId.startsWith('manually_added')){
         this.isLoading = false;
         var currentBook = this.bookService.books.find(book => book.id === bookId);
         if (!!currentBook) {
           this.book = currentBook;
           this.updateBookDetail(this.book);
         }
-      } else {
-      this.fetchBookDetailsFromAPI(bookId);
-    }});
+    });
   }
 
   registerToBookAddStream(): void {
@@ -51,20 +47,6 @@ export class BookDetailComponent implements OnInit {
           this.isLoading = false;
           this.book = updatedBooks[0];
         }
-      }
-    );
-  }
-
-  fetchBookDetailsFromAPI(bookId: string): void {
-    this.bookService.getBookDetailsFromAPI(bookId).subscribe(
-      (data: Book) => {
-        this.book = data;
-        this.updateBookDetail(this.book);
-        console.log(this.book)
-        this.isLoading = false;},
-      (error) => {
-        console.error(error);
-        this.isLoading = false;
       }
     );
   }
@@ -81,6 +63,7 @@ export class BookDetailComponent implements OnInit {
   }
 
   onDeleteBook(): void {
+    console.log(this.book.id)
     this.bookService.deleteBook(this.book.id);
     this.router.navigate(['/books']);
   }

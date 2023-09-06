@@ -10,7 +10,6 @@ import { Book } from '../book.model';
 })
 
 export class BookListComponent implements OnInit, OnDestroy {
-  books:Book[] = [];
   private booksChangedSub: Subscription;
   subscription: Subscription;
   searchQuery: string = '';
@@ -27,7 +26,8 @@ export class BookListComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
       this.booksChangedSub = this.bookService.booksChanged.subscribe(
         (updatedBooks: Book[]) => {
-          this.books= updatedBooks;
+          this.bookService.books= updatedBooks;
+          console.log("this.books inside book changed",this.bookService.books)
           this.filterAndSortBooks();
         }
       );
@@ -35,32 +35,26 @@ export class BookListComponent implements OnInit, OnDestroy {
     }
 
   fetchAllBooks(): void {
-    const defaultQuery = '0';
+    this.bookService.books = this.bookService.getBooks();
+    if(!this.bookService.books){
+    const defaultQuery = 'twilight';
     this.bookService.getBooksFromAPI(defaultQuery).subscribe((data) => {
-      this.books = [...this.books, ...data]
+      this.bookService.addAPIBooksToLocalStorage(data);
       this.filterAndSortBooks();
-      this.updateBookListWithStorage();
-    });
+    })} else{
+    this.filterAndSortBooks();}
   }
 
   filterAndSortBooks(): void {
-    const filteredBooks = this.books.filter((book) => {
-      console.log()
-      const hasPublicationYear = book.publishedDate;
+    console.log("this.bookService.books", this.bookService.books)
+    const filteredBooks = this.bookService.books.filter((book) => {
+      const hasPublicationDate = book.publishedDate;
       const hasAuthor = book.authors && book.authors.length > 0;
       const hasCatalogNumber = book.id;
-      return hasPublicationYear && hasAuthor && hasCatalogNumber;
+      return hasPublicationDate && hasAuthor && hasCatalogNumber;
     });
     this.sortedBooks = this.sortBooks(filteredBooks);
     this.bookService.books = this.sortedBooks;
-  }
-
-  updateBookListWithStorage(): void {
-    if(this.booksFromStorage){
-      for(let book of this.booksFromStorage){
-        this.sortedBooks.unshift(book);
-      }
-    }
   }
 
   sortBooks(books: Book[]): Book[] {
@@ -97,22 +91,16 @@ export class BookListComponent implements OnInit, OnDestroy {
   }
 
   searchBooks(): void {
-  if (this.searchQuery.trim() !== '') {
-    this.bookService.getBooksFromAPI(this.searchQuery).subscribe((data) => {
-      this.updateSortedBooks(data);
-    });
-  } else {
-    this.fetchAllBooks();
-  }
-}
+    if (this.searchQuery.trim() !== '') {
+      const filteredBooks = this.bookService.books.filter((book) => {
 
-  updateSortedBooks(newBooks: Book[]): void {
-    const filteredBooks = newBooks.filter((book) => {
-      const hasPublicationYear = book.publishedDate;
-      const hasAuthor = book.authors && book.authors.length > 0;
-      const hasCatalogNumber = book.id;
-      return hasPublicationYear && hasAuthor && hasCatalogNumber;
-    });
-    this.sortedBooks = this.sortBooks(filteredBooks);
+        const titleMatches = book.title && book.title.toLowerCase().includes(this.searchQuery.toLowerCase());
+        const authorMatches = book.authors && book.authors.toLowerCase().includes(this.searchQuery.toLowerCase());
+
+        return titleMatches || authorMatches;
+      });
+
+      this.sortedBooks = this.sortBooks(filteredBooks);
+    }
   }
 }

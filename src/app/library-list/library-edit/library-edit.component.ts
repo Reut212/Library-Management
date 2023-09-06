@@ -30,7 +30,6 @@ export class LibraryEditComponent implements OnInit, OnDestroy {
         })
       }
     );
-
   }
 
   onSubmit(form: NgForm): void {
@@ -44,7 +43,6 @@ export class LibraryEditComponent implements OnInit, OnDestroy {
     }
     form.reset();
   }
-
 
   ngOnDestroy() {
     this.subscription.unsubscribe;

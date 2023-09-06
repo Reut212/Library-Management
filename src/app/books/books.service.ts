@@ -12,10 +12,12 @@ export class BooksService {
 
   private apiUrl = 'https://www.googleapis.com/books/v1/volumes';
   private apiKey = 'AIzaSyAMIIrYNFTTSPAyq6lXAugUGcpUXpZjy9Y'
-
+  bookSaved = new EventEmitter<boolean>();
+  bookSavedStream = this.bookSaved.asObservable();
   booksChanged = new EventEmitter<Book[]>();
   bookSelected = new Subject<Book>();
-  public books: Book[] = [];
+  public books: Book[];
+  private booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
 
   constructor(private libraryListService: LibraryListService, private http: HttpClient){}
 
@@ -32,57 +34,46 @@ export class BooksService {
           authors: authors,
           publisher: volumeInfo.publisher,
           publishedDate: volumeInfo.publishedDate,
-          imageLinks: volumeInfo.imageLinks,
+          imageLinks: volumeInfo.imageLinks.thumbnail,
           description: volumeInfo.description,
         };
-      });
-      // console.log("Books=", books)
+
+      }
+      );
+      this.books = books;
+      console.log("Books=", this.books)
       return books;
     }));
   }
 
-  getBookDetailsFromAPI(bookID: string): Observable<Book> {
-    const url = `${this.apiUrl}/${bookID}?key=${this.apiKey}`;
-    return this.http.get(url).pipe(map((response: any) => {
-        const volumeInfo = response.volumeInfo;
-        const authors = volumeInfo.authors ? volumeInfo.authors.join(', ') : 'N/A';
-        return {
-          id: response.id,
-          title: volumeInfo.title || 'N/A',
-          authors: authors,
-          publisher: volumeInfo.publisher,
-          publishedDate: volumeInfo.publishedDate,
-          imageLinks: volumeInfo.imageLinks,
-          description: volumeInfo.description,
-        };
-      }))
+  getBook(id: string): Book {
+      const chosenBook = this.booksFromStorage.find(book => book.id === id);
+      return chosenBook;
   }
 
-  getBook(id: string): Book {
-    if (id.startsWith('manually_added')){
-      var booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
-      const chosenBook = booksFromStorage.find(book => book.id === id);
-      return chosenBook;
+  getBooks(): Book[] {
+    return this.booksFromStorage;
+  }
+
+  addAPIBooksToLocalStorage(books: Book[]): void {
+    if (!this.booksFromStorage) {
+      this.booksFromStorage = books;
+      localStorage.setItem('booksList', JSON.stringify(this.booksFromStorage));
+      console.log("addAPIBooksToLocalStorage", this.booksFromStorage)
     }
-    return this.books[id];
   }
 
   addBook(newBook: Book): void {
-    var booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
-    if (!booksFromStorage) {
-      booksFromStorage = [];
-    }
-    booksFromStorage.push(newBook);
-    localStorage.setItem('booksList', JSON.stringify(booksFromStorage));
+    this.booksFromStorage.push(newBook);
+    localStorage.setItem('booksList', JSON.stringify(this.booksFromStorage));
+    this.books = this.booksFromStorage;
     console.log(this.books)
-    this.books.unshift(newBook);
     this.booksChanged.emit(this.books.slice());
+    this.bookSaved.emit(true);
   }
 
   updateBook(id: string, newBook: Book): void {
-    if (id.startsWith('manually_added')){
-      const booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
-      const updatedBooks = booksFromStorage.map((book: Book) => {
+      const updatedBooks = this.booksFromStorage.map((book: Book) => {
         if (book.id === id) {
           return newBook;
         }
@@ -91,48 +82,35 @@ export class BooksService {
 
       localStorage.setItem('booksList', JSON.stringify(updatedBooks));
 
-      const bookIndex = this.books.findIndex(book => book.id === id);
+      const bookIndex = this.booksFromStorage.findIndex(book => book.id === id);
       if (bookIndex !== -1) {
-        this.books[bookIndex] = newBook;
+        this.booksFromStorage[bookIndex] = newBook;
+        this.books = this.booksFromStorage;
         this.booksChanged.emit(this.books.slice());
       }
-    }
+      this.bookSaved.emit(true);
   }
 
   deleteBook(bookID: string): void{
     const bookIndex = this.books.findIndex(book => book.id === bookID);
     if (bookIndex !== -1) {
       this.books.splice(bookIndex, 1);
-      if (bookID.startsWith('manually_added')){
-        this.deleteBookFromLocalStorage(bookID);
-      } else {
-        this.deleteBookFromBookAPI(bookID);
-      }
     }
+    console.log(this.books)
+    this.deleteBookFromLocalStorage(bookID);
+    this.books = this.booksFromStorage;
   }
 
   deleteBookFromLocalStorage(bookId: string): void {
-    var booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
-    const chosenBook = booksFromStorage.findIndex(book => book.id === bookId);
+    const chosenBook = this.booksFromStorage.findIndex(book => book.id === bookId);
     if (chosenBook !== -1) {
-      booksFromStorage.splice(chosenBook, 1);
-      localStorage.setItem('booksList', JSON.stringify(booksFromStorage));
+      this.booksFromStorage.splice(chosenBook, 1);
+      localStorage.setItem('booksList', JSON.stringify(this.booksFromStorage));
     }
   }
 
-  deleteBookFromBookAPI(bookId: string): void {
-    const apiUrl = `${this.apiUrl}/${bookId}`;
-    this.http.delete(apiUrl).subscribe(
-      (response) => {
-        console.log('Book removed: ', response);
-      },
-      (error) => {
-        console.error('Error removing book: ', error);
-      }
-    );
-  }
-
   addBookToLibraryList(bookDetail: BookDetailes): void {
+    console.log("bookDetail", bookDetail);
     this.libraryListService.addBookDetail(bookDetail);
   }
 }

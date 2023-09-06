@@ -5,6 +5,8 @@ import { Subject } from 'rxjs-compat/Subject';
 export class LibraryListService {
   bookAdded = new Subject<BookDetailes[]>();
   startedEditing = new Subject<number>();
+  bookAddedToFav = new EventEmitter<boolean>();
+  bookAddedToFavStream = this.bookAddedToFav.asObservable();
 
   private bookDetails: BookDetailes[] = [];
 
@@ -22,8 +24,11 @@ export class LibraryListService {
   }
 
   addBookDetail(bookDetails: BookDetailes): void {
+    const bookIsFound = this.bookDetails.some(bookDetail => bookDetail.name === bookDetails.name && bookDetail.authors === bookDetails.authors);
+    if(!bookIsFound){
     this.bookDetails.push(bookDetails);
     this.bookAdded.next(this.bookDetails.slice())
+    this.bookAddedToFav.emit(true);}
   }
 
   updateBookDeatil(index: number, newBookDetail: BookDetailes): void {
