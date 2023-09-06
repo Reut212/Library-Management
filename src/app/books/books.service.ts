@@ -110,7 +110,6 @@ export class BooksService {
   }
 
   isCatalogNumberUnique(catalogNumber: string): boolean {
-    // Check if the catalog number already exists in the list of books
     return !this.books.some((book) => book.id === catalogNumber);
   }
 }
