@@ -63,7 +63,6 @@ export class BookDetailComponent implements OnInit {
   }
 
   onDeleteBook(): void {
-    console.log(this.book.id)
     this.bookService.deleteBook(this.book.id);
     this.router.navigate(['/books']);
   }
