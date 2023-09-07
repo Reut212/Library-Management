@@ -1,5 +1,5 @@
 import { EventEmitter } from '@angular/core';
-import { BookDetailes } from '../shared/bookDetailes.model';
+import { BookDetailes } from '../models/bookDetailes.model';
 import { Subject } from 'rxjs-compat/Subject';
 
 export class LibraryListService {

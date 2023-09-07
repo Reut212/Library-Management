@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs-compat';
 import { BooksService } from '../books.service';
-import { Book } from '../book.model';
+import { Book } from '../../models/book.model';
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',

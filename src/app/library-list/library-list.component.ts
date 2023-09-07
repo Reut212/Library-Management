@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { BookDetailes } from '../shared/bookDetailes.model';
+import { BookDetailes } from '../models/bookDetailes.model';
 import { LibraryListService } from './library-list.service';
 import { Subscription } from 'rxjs-compat';
 

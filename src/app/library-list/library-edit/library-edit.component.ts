@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { BookDetailes } from 'src/app/shared/bookDetailes.model';
+import { BookDetailes } from 'src/app/models/bookDetailes.model';
 import { LibraryListService } from '../library-list.service';
 import { Subscription } from 'rxjs/Subscription';
 

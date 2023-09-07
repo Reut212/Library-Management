@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Book } from '../book.model';
+import { Book } from '../../models/book.model';
 import { BooksService } from '../books.service';
-import { BookDetailes } from 'src/app/shared/bookDetailes.model';
+import { BookDetailes } from 'src/app/models/bookDetailes.model';
 
 @Component({
   selector: 'app-book-detail',

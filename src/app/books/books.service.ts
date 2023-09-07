@@ -1,10 +1,11 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { LibraryListService } from '../library-list/library-list.service';
-import { BookDetailes } from '../shared/bookDetailes.model';
-import { Book } from './book.model';
+import { BookDetailes } from '../models/bookDetailes.model';
+import { Book } from '../models/book.model';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
+import { RootObject } from '../models/item.interface';
 
 @Injectable()
 export class BooksService {
@@ -23,7 +24,7 @@ export class BooksService {
 
   getBooksFromAPI(query: string): Observable<Book[]> {
     const url = `${this.apiUrl}?q=${query}&key=${this.apiKey}`;
-    return this.http.get(url).pipe(map((response: any) => {
+    return this.http.get(url).pipe(map((response: RootObject) => {
       const items = response.items || [];
       const books = items.map(item => {
         const volumeInfo = item.volumeInfo;
@@ -37,7 +38,6 @@ export class BooksService {
           imageLinks: volumeInfo.imageLinks.thumbnail,
           description: volumeInfo.description,
         };
-
       }
       );
       this.books = books;
