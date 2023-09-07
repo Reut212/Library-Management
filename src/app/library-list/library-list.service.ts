@@ -3,10 +3,10 @@ import { BookDetailes } from '../shared/bookDetailes.model';
 import { Subject } from 'rxjs-compat/Subject';
 
 export class LibraryListService {
-  bookAdded = new Subject<BookDetailes[]>();
-  startedEditing = new Subject<number>();
-  bookAddedToFav = new EventEmitter<boolean>();
-  bookAddedToFavStream = this.bookAddedToFav.asObservable();
+  public bookAdded = new Subject<BookDetailes[]>();
+  public startedEditing = new Subject<number>();
+  private bookAddedToFav = new EventEmitter<boolean>();
+  public bookAddedToFavStream = this.bookAddedToFav.asObservable();
 
   private bookDetails: BookDetailes[] = [];
 

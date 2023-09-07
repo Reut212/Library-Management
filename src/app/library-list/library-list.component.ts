@@ -9,9 +9,11 @@ import { Subscription } from 'rxjs-compat';
   styleUrls: ['./library-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class LibraryListComponent implements OnInit, OnDestroy {
-  bookDetails: BookDetailes[];
+  public bookDetails: BookDetailes[];
   private subscription: Subscription;
+
   constructor(
     private libraryListService: LibraryListService,
     private cdref: ChangeDetectorRef) { }
@@ -30,7 +32,7 @@ export class LibraryListComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe();
   }
 
-  onEditItem(index: number) {
+  onEditItem(index: number): void {
     this.libraryListService.startedEditing.next(index);
   }
 }

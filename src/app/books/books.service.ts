@@ -17,7 +17,9 @@ export class BooksService {
   public books: Book[];
   private booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
 
-  constructor(private libraryListService: LibraryListService, private http: HttpClient){}
+  constructor(
+    private libraryListService: LibraryListService,
+    private http: HttpClient){}
 
   getBooksFromAPI(query: string): Observable<Book[]> {
     const url = `${this.apiUrl}?q=${query}&key=${this.apiKey}`;

@@ -12,9 +12,9 @@ import { Book } from '../book.model';
 
 export class BookListComponent implements OnInit, OnDestroy {
   private booksChangedSub: Subscription;
-  searchQuery: string = '';
-  sortOption: string = 'authors';
-  sortedBooks: Book[] = [];
+  public searchQuery: string = '';
+  public sortOption: string = 'authors';
+  public sortedBooks: Book[] = [];
 
   constructor(
     private bookService: BooksService,

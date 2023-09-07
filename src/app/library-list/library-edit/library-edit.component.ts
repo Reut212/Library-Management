@@ -14,9 +14,9 @@ import { Subscription } from 'rxjs/Subscription';
 export class LibraryEditComponent implements OnInit, OnDestroy {
   @ViewChild('f', {static: false}) libraryListForm: NgForm;
   subscription: Subscription;
-  editMode=false;
-  editedItemIndex: number;
-  editedItem: BookDetailes;
+  public editMode: Boolean = false;
+  private editedItemIndex: number;
+  private editedItem: BookDetailes;
 
   constructor(
     private libraryListService: LibraryListService,
@@ -37,7 +37,7 @@ export class LibraryEditComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe;
   }
 

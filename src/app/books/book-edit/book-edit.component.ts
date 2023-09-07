@@ -10,12 +10,13 @@ import { BooksService } from '../books.service';
   styleUrls: ['./book-edit.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class BookEditComponent implements OnInit {
-  id: string;
-  editMode = false;
-  bookForm: FormGroup;
-  book: Book;
-  showSuccessAlert: boolean = false;
+  private id: string;
+  private editMode = false;
+  public bookForm: FormGroup;
+  public book: Book;
+  public showSuccessAlert: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -109,7 +110,7 @@ export class BookEditComponent implements OnInit {
     }
   }
 
-  onCancel() {
+  onCancel() : void {
     this.router.navigate(['../'], {relativeTo: this.route});
   }
 }

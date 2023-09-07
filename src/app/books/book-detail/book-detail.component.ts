@@ -12,11 +12,9 @@ import { BookDetailes } from 'src/app/shared/bookDetailes.model';
 })
 
 export class BookDetailComponent implements OnInit {
-  book: Book;
-  bookId: string;
-  isLoading: boolean = true;
-  ableToFetch: boolean = false;
-  bookDetail: BookDetailes;
+  private book: Book;
+  public isLoading: boolean = true;
+  private bookDetail: BookDetailes;
 
   constructor(
     private bookService: BooksService,
