@@ -1,5 +1,3 @@
-import { BookDetailes } from '../shared/bookDetailes.model';
-
 export class Book {
   constructor(
     public id: string,

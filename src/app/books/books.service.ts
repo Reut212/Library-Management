@@ -4,7 +4,6 @@ import { BookDetailes } from '../shared/bookDetailes.model';
 import { Book } from './book.model';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
@@ -15,7 +14,6 @@ export class BooksService {
   bookSaved = new EventEmitter<boolean>();
   bookSavedStream = this.bookSaved.asObservable();
   booksChanged = new EventEmitter<Book[]>();
-  bookSelected = new Subject<Book>();
   public books: Book[];
   private booksFromStorage: Book[] = JSON.parse(localStorage.getItem('booksList'));
 
