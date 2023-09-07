@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BookDetailes } from 'src/app/shared/bookDetailes.model';
 import { LibraryListService } from '../library-list.service';
@@ -7,8 +7,10 @@ import { Subscription } from 'rxjs/Subscription';
 @Component({
   selector: 'app-library-edit',
   templateUrl: './library-edit.component.html',
-  styleUrls: ['./library-edit.component.css']
+  styleUrls: ['./library-edit.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class LibraryEditComponent implements OnInit, OnDestroy {
   @ViewChild('f', {static: false}) libraryListForm: NgForm;
   subscription: Subscription;
@@ -16,7 +18,9 @@ export class LibraryEditComponent implements OnInit, OnDestroy {
   editedItemIndex: number;
   editedItem: BookDetailes;
 
-  constructor(private libraryListService: LibraryListService) { }
+  constructor(
+    private libraryListService: LibraryListService,
+    private cdref: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.subscription = this.libraryListService.startedEditing.subscribe(
@@ -28,6 +32,7 @@ export class LibraryEditComponent implements OnInit, OnDestroy {
           name: this.editedItem.name,
           authors: this.editedItem.authors
         })
+        this.cdref.markForCheck();
       }
     );
   }

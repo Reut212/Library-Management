@@ -95,6 +95,7 @@ export class BooksService {
     }
     this.deleteBookFromLocalStorage(bookID);
     this.books = this.booksFromStorage;
+    this.booksChanged.emit(this.books.slice());
   }
 
   deleteBookFromLocalStorage(bookId: string): void {

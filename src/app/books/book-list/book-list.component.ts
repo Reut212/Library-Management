@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs-compat';
 import { BooksService } from '../books.service';
@@ -6,7 +6,8 @@ import { Book } from '../book.model';
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.css']
+  styleUrls: ['./book-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class BookListComponent implements OnInit, OnDestroy {
@@ -18,12 +19,14 @@ export class BookListComponent implements OnInit, OnDestroy {
   constructor(
     private bookService: BooksService,
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private cdref: ChangeDetectorRef) { }
 
     ngOnInit(): void {
       this.booksChangedSub = this.bookService.booksChanged.subscribe(
         (updatedBooks: Book[]) => {
           this.bookService.books = updatedBooks;
+          this.cdref.markForCheck();
           this.filterAndSortBooks();
         }
       );

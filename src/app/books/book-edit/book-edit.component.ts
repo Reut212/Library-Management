@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Book } from '../book.model';
@@ -7,7 +7,8 @@ import { BooksService } from '../books.service';
 @Component({
   selector: 'app-book-edit',
   templateUrl: './book-edit.component.html',
-  styleUrls: ['./book-edit.component.css']
+  styleUrls: ['./book-edit.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookEditComponent implements OnInit {
   id: string;

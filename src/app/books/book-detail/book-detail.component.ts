@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Book } from '../book.model';
 import { BooksService } from '../books.service';
@@ -7,11 +7,11 @@ import { BookDetailes } from 'src/app/shared/bookDetailes.model';
 @Component({
   selector: 'app-book-detail',
   templateUrl: './book-detail.component.html',
-  styleUrls: ['./book-detail.component.css']
+  styleUrls: ['./book-detail.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class BookDetailComponent implements OnInit {
-  books:Book[] = [];
   book: Book;
   bookId: string;
   isLoading: boolean = true;
@@ -21,7 +21,8 @@ export class BookDetailComponent implements OnInit {
   constructor(
     private bookService: BooksService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private cdref: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.registerToBookAddStream();
@@ -36,6 +37,7 @@ export class BookDetailComponent implements OnInit {
         if (!!currentBook) {
           this.book = currentBook;
           this.updateBookDetail(this.book);
+          this.cdref.markForCheck();
         }
     });
   }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { BookDetailes } from '../shared/bookDetailes.model';
 import { LibraryListService } from './library-list.service';
 import { Subscription } from 'rxjs-compat';
@@ -7,17 +7,21 @@ import { Subscription } from 'rxjs-compat';
   selector: 'app-library-list',
   templateUrl: './library-list.component.html',
   styleUrls: ['./library-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LibraryListComponent implements OnInit, OnDestroy {
   bookDetails: BookDetailes[];
   private subscription: Subscription;
-  constructor(private libraryListService: LibraryListService) { }
+  constructor(
+    private libraryListService: LibraryListService,
+    private cdref: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.bookDetails = this.libraryListService.getBookDetailes();
     this.subscription = this.libraryListService.bookAdded.subscribe(
       (bookDetails: BookDetailes[]) => {
         this.bookDetails = bookDetails;
+        this.cdref.markForCheck();
       }
     )
   }
